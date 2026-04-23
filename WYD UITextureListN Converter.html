@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WYD UITextureListN Converter</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #12161d;
+      --panel: #1a2029;
+      --panel-2: #232c38;
+      --border: #334155;
+      --text: #e5edf7;
+      --muted: #93a4ba;
+      --accent: #52b2ff;
+      --accent-2: #7dd3fc;
+      --success: #34d399;
+      --warning: #fbbf24;
+      --danger: #f87171;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, #0f141b 0%, #151b23 100%);
+      color: var(--text);
+      font-family: "Segoe UI", Arial, sans-serif;
+    }
+
+    .app {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .hero {
+      display: grid;
+      gap: 10px;
+      padding: 20px 22px;
+      border: 1px solid var(--border);
+      background: rgba(26, 32, 41, 0.95);
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      font-size: 32px;
+      font-weight: 700;
+    }
+
+    .hero-top {
+      display: grid;
+      gap: 8px;
+    }
+
+    .hero p {
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .hero-subtitle {
+      color: var(--accent-2);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .panel {
+      border: 1px solid var(--border);
+      background: rgba(26, 32, 41, 0.95);
+      padding: 18px;
+    }
+
+    .panel h2 {
+      font-size: 17px;
+      margin-bottom: 6px;
+    }
+
+    .panel p {
+      color: var(--muted);
+      line-height: 1.45;
+      font-size: 13px;
+    }
+
+    .section {
+      margin-top: 16px;
+      display: grid;
+      gap: 12px;
+    }
+
+    label {
+      display: grid;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    input[type="file"] {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      background: var(--panel-2);
+      color: var(--text);
+    }
+
+    .hidden-input {
+      display: none;
+    }
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .button,
+    button {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: var(--panel-2);
+      color: var(--text);
+      padding: 10px 14px;
+      cursor: pointer;
+      font-size: 14px;
+      min-height: 40px;
+    }
+
+    button.primary {
+      background: linear-gradient(180deg, #2782c7 0%, #1c6cad 100%);
+      border-color: #2d8dd3;
+    }
+
+    button:hover {
+      filter: brightness(1.08);
+    }
+
+    button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      filter: none;
+    }
+
+    .choice-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      background: var(--panel-2);
+    }
+
+    .choice-group label {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    .meta {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .meta-item {
+      border: 1px solid var(--border);
+      background: rgba(35, 44, 56, 0.85);
+      padding: 12px;
+      min-height: 74px;
+    }
+
+    .meta-item strong {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .meta-item span {
+      font-size: 15px;
+      word-break: break-word;
+    }
+
+    .log-panel {
+      margin-top: 18px;
+      border: 1px solid var(--border);
+      background: rgba(26, 32, 41, 0.95);
+      padding: 18px;
+    }
+
+    .log {
+      margin-top: 12px;
+      min-height: 180px;
+      max-height: 300px;
+      overflow: auto;
+      padding: 12px;
+      border: 1px solid var(--border);
+      background: #0d1117;
+      white-space: pre-wrap;
+      line-height: 1.45;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 13px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 0 10px;
+      border: 1px solid var(--border);
+      background: rgba(35, 44, 56, 0.85);
+      color: var(--accent-2);
+      font-size: 12px;
+    }
+
+    .footer-note {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .viewer-toolbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      gap: 10px;
+      margin-top: 14px;
+      align-items: center;
+    }
+
+    .viewer-toolbar input[type="text"] {
+      width: 100%;
+      min-height: 40px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      background: var(--panel-2);
+      color: var(--text);
+    }
+
+    .table-wrap {
+      margin-top: 14px;
+      max-height: 360px;
+      overflow: auto;
+      border: 1px solid var(--border);
+      background: #0d1117;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    thead th {
+      position: sticky;
+      top: 0;
+      background: #18202a;
+      z-index: 1;
+    }
+
+    th,
+    td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #253142;
+      text-align: left;
+      font-size: 13px;
+      vertical-align: top;
+      word-break: break-word;
+    }
+
+    th:nth-child(1),
+    td:nth-child(1) {
+      width: 90px;
+    }
+
+    th:nth-child(2),
+    td:nth-child(2) {
+      width: auto;
+    }
+
+    th:nth-child(3),
+    td:nth-child(3) {
+      width: 90px;
+    }
+
+    .empty-state {
+      padding: 24px 12px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .status-success { color: var(--success); }
+    .status-warning { color: var(--warning); }
+    .status-danger { color: var(--danger); }
+
+    @media (max-width: 860px) {
+      .grid,
+      .meta {
+        grid-template-columns: 1fr;
+      }
+
+      .app {
+        padding: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <section class="hero">
+      <div class="hero-top">
+        <h1>WYD UITextureListN Converter</h1>
+        <div class="tag hero-subtitle">Ferramenta de apoio independente</div>
+      </div>
+      <p>
+        Ferramenta standalone em HTML para visualizar, ler, exportar e reconstruir arquivos
+        <code>UITextureListN.bin</code> com compatibilidade para layouts de 264 e 528 bytes por registro.
+      </p>
+    </section>
+
+    <section class="grid">
+      <div class="panel">
+        <h2>BIN PARA TXT</h2>
+        <p>Abra um arquivo BIN, detecte o layout automaticamente e baixe o TXT completo com cabeçalho de compatibilidade.</p>
+
+        <div class="section">
+          <label>
+            Arquivo BIN
+            <div class="row">
+              <button id="binOpenButton" type="button">Abrir BIN</button>
+            </div>
+            <input id="binInput" class="hidden-input" type="file" accept=".bin,application/octet-stream">
+          </label>
+
+          <div class="row">
+            <button id="detectButton">Detectar layout</button>
+            <button id="binToTxtButton" class="primary" disabled>Converter BIN -> TXT</button>
+          </div>
+
+          <div class="meta">
+            <div class="meta-item">
+              <strong>Arquivo</strong>
+              <span id="binName">Nenhum arquivo selecionado</span>
+            </div>
+            <div class="meta-item">
+              <strong>Layout</strong>
+              <span id="detectedLayout">-</span>
+            </div>
+            <div class="meta-item">
+              <strong>Entradas</strong>
+              <span id="detectedCount">-</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>TXT PARA BIN</h2>
+        <p>Abra um TXT, escolha o layout manualmente ou use um BIN de referência para reconstruir o arquivo corretamente.</p>
+
+        <div class="section">
+          <label>
+            Arquivo TXT
+            <div class="row">
+              <button id="txtOpenButton" type="button">Abrir TXT</button>
+            </div>
+            <input id="txtInput" class="hidden-input" type="file" accept=".txt,text/plain">
+          </label>
+
+          <label>
+            BIN de referência (opcional)
+            <div class="row">
+              <button id="referenceOpenButton" type="button">Abrir BIN de referência</button>
+            </div>
+            <input id="referenceInput" class="hidden-input" type="file" accept=".bin,application/octet-stream">
+          </label>
+
+          <label>
+            Layout de saída
+            <div class="choice-group">
+              <label><input type="radio" name="entrySize" value="auto" checked> Auto</label>
+              <label><input type="radio" name="entrySize" value="264"> 264</label>
+              <label><input type="radio" name="entrySize" value="528"> 528</label>
+            </div>
+          </label>
+
+          <div class="row">
+            <button id="txtToBinButton" class="primary" disabled>Converter TXT -> BIN</button>
+          </div>
+
+          <div class="meta">
+            <div class="meta-item">
+              <strong>TXT</strong>
+              <span id="txtName">Nenhum arquivo selecionado</span>
+            </div>
+            <div class="meta-item">
+              <strong>BIN referência</strong>
+              <span id="referenceName">Nenhum</span>
+            </div>
+            <div class="meta-item">
+              <strong>Layout final</strong>
+              <span id="outputLayout">Auto</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="log-panel">
+      <h3>Visualizador do BIN</h3>
+      <p class="footer-note">
+        Abra um BIN para listar as entradas atuais e consultar rapidamente índice, caminho e tipo.
+      </p>
+      <div class="viewer-toolbar">
+        <input id="viewerSearch" type="text" placeholder="Buscar por índice, caminho ou tipo">
+        <button id="refreshViewerButton" type="button">Atualizar lista</button>
+        <button id="exportViewerTxtButton" type="button" disabled>Baixar TXT da lista</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Índice</th>
+              <th>Caminho</th>
+              <th>Tipo</th>
+            </tr>
+          </thead>
+          <tbody id="viewerTableBody">
+            <tr>
+              <td colspan="3" class="empty-state">Abra um arquivo BIN para visualizar os registros.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="log-panel">
+      <h3>Status</h3>
+      <div id="log" class="log"></div>
+      <p class="footer-note">
+        O navegador processa tudo localmente. Nenhum arquivo é enviado para servidor.
+      </p>
+    </section>
+  </div>
+
+  <script>
+    const TOTAL_ENTRIES = 512;
+    const KNOWN_LAYOUTS = {
+      528: { entrySize: 528, typeOffset: 510 },
+      264: { entrySize: 264, typeOffset: 255 }
+    };
+
+    const state = {
+      binFile: null,
+      txtFile: null,
+      referenceFile: null,
+      detectedLayout: null
+    };
+
+    const elements = {
+      binInput: document.getElementById("binInput"),
+      txtInput: document.getElementById("txtInput"),
+      referenceInput: document.getElementById("referenceInput"),
+      binOpenButton: document.getElementById("binOpenButton"),
+      txtOpenButton: document.getElementById("txtOpenButton"),
+      referenceOpenButton: document.getElementById("referenceOpenButton"),
+      detectButton: document.getElementById("detectButton"),
+      binToTxtButton: document.getElementById("binToTxtButton"),
+      txtToBinButton: document.getElementById("txtToBinButton"),
+      binName: document.getElementById("binName"),
+      detectedLayout: document.getElementById("detectedLayout"),
+      detectedCount: document.getElementById("detectedCount"),
+      txtName: document.getElementById("txtName"),
+      referenceName: document.getElementById("referenceName"),
+      outputLayout: document.getElementById("outputLayout"),
+      viewerSearch: document.getElementById("viewerSearch"),
+      refreshViewerButton: document.getElementById("refreshViewerButton"),
+      exportViewerTxtButton: document.getElementById("exportViewerTxtButton"),
+      viewerTableBody: document.getElementById("viewerTableBody"),
+      log: document.getElementById("log")
+    };
+
+    state.viewerRows = [];
+
+    function appendLog(message, type = "") {
+      const line = `[${new Date().toLocaleTimeString("pt-BR")}] ${message}`;
+      const div = document.createElement("div");
+      if (type) div.className = type;
+      div.textContent = line;
+      elements.log.appendChild(div);
+      elements.log.scrollTop = elements.log.scrollHeight;
+    }
+
+    function getSelectedEntrySize() {
+      const checked = document.querySelector('input[name="entrySize"]:checked');
+      return checked ? checked.value : "auto";
+    }
+
+    function updateButtons() {
+      elements.binToTxtButton.disabled = !state.binFile;
+      elements.txtToBinButton.disabled = !state.txtFile;
+      elements.exportViewerTxtButton.disabled = !state.binFile;
+      elements.outputLayout.textContent = formatOutputMode();
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+
+    async function pickFileWithSystemPicker(options, fallbackInput) {
+      if (window.showOpenFilePicker) {
+        try {
+          const [handle] = await window.showOpenFilePicker(options);
+          if (!handle) return null;
+          return await handle.getFile();
+        } catch (error) {
+          if (error && error.name === "AbortError") return null;
+          appendLog("O navegador nao liberou o seletor moderno. Usando abertura padrao.", "status-warning");
+        }
+      }
+
+      return new Promise((resolve) => {
+        fallbackInput.value = "";
+        fallbackInput.onchange = () => resolve(fallbackInput.files[0] || null);
+        fallbackInput.click();
+      });
+    }
+
+    function formatOutputMode() {
+      const mode = getSelectedEntrySize();
+      if (mode === "auto") {
+        if (state.referenceFile) return "Auto (usando BIN de referência)";
+        return "Auto";
+      }
+      return `${mode} bytes`;
+    }
+
+    function sanitizeName(bytes) {
+      let end = bytes.indexOf(0);
+      if (end === -1) end = bytes.length;
+      const slice = bytes.slice(0, end);
+      return new TextDecoder("latin1").decode(slice).trim();
+    }
+
+    function scoreLayout(data, entrySize) {
+      if (data.byteLength % entrySize !== 0) return -1;
+
+      const count = data.byteLength / entrySize;
+      let score = 0;
+      let valid = 0;
+
+      for (let i = 0; i < Math.min(count, TOTAL_ENTRIES); i += 1) {
+        const start = i * entrySize;
+        const block = new Uint8Array(data.slice(start, start + entrySize));
+        const name = sanitizeName(block);
+        if (!name) continue;
+
+        valid += 1;
+        const lower = name.toLowerCase();
+        if (name.includes("\\") || name.includes("/")) score += 4;
+        if (/\.(wyt|tga|png|jpg|jpeg|bmp|vgi|dds)$/i.test(lower)) score += 8;
+        if (/^(ui[\\/]|nui[\\/]|mesh[\\/])/i.test(lower)) score += 6;
+      }
+
+      if (count === TOTAL_ENTRIES) score += 100;
+      score += valid * 10;
+      return score;
+    }
+
+    function detectLayout(data) {
+      let best = null;
+
+      Object.values(KNOWN_LAYOUTS).forEach((layout) => {
+        const score = scoreLayout(data, layout.entrySize);
+        if (score < 0) return;
+
+        const candidate = {
+          ...layout,
+          score,
+          count: data.byteLength / layout.entrySize
+        };
+
+        if (!best || candidate.score > best.score) {
+          best = candidate;
+        }
+      });
+
+      if (!best) {
+        throw new Error("Nao foi possivel identificar o layout da UITextureListN.bin");
+      }
+
+      return best;
+    }
+
+    function extractTipo(block, typeOffset) {
+      if (typeOffset >= 0 && typeOffset < block.length) {
+        const value = block[typeOffset];
+        if (value) return String.fromCharCode(value);
+      }
+
+      for (let i = block.length - 1; i >= 0; i -= 1) {
+        if (block[i] !== 0) return String.fromCharCode(block[i]);
+      }
+
+      return "";
+    }
+
+    function buildTxtFromBin(arrayBuffer, layout) {
+      const lines = [
+        `# entry_size=${layout.entrySize}`,
+        `# total_entries=${TOTAL_ENTRIES}`,
+        `# type_offset=${layout.typeOffset}`
+      ];
+
+      for (let index = 0; index < TOTAL_ENTRIES; index += 1) {
+        const start = index * layout.entrySize;
+        const end = start + layout.entrySize;
+        let block = new Uint8Array(arrayBuffer.slice(start, end));
+        if (block.length < layout.entrySize) {
+          const padded = new Uint8Array(layout.entrySize);
+          padded.set(block, 0);
+          block = padded;
+        }
+
+        const name = sanitizeName(block);
+        const tipo = extractTipo(block, layout.typeOffset);
+        lines.push(name ? `${index}, ${name}, ${tipo}` : `${index}, `);
+      }
+
+      return lines.join("\n");
+    }
+
+    function buildViewerRows(arrayBuffer, layout) {
+      const rows = [];
+
+      for (let index = 0; index < TOTAL_ENTRIES; index += 1) {
+        const start = index * layout.entrySize;
+        const end = start + layout.entrySize;
+        let block = new Uint8Array(arrayBuffer.slice(start, end));
+        if (block.length < layout.entrySize) {
+          const padded = new Uint8Array(layout.entrySize);
+          padded.set(block, 0);
+          block = padded;
+        }
+
+        const path = sanitizeName(block);
+        const tipo = extractTipo(block, layout.typeOffset);
+        rows.push({ index, path, tipo });
+      }
+
+      return rows;
+    }
+
+    function renderViewerRows() {
+      const search = elements.viewerSearch.value.trim().toLowerCase();
+      const rows = state.viewerRows.filter((row) => {
+        if (!search) return true;
+        return (
+          String(row.index).includes(search) ||
+          row.path.toLowerCase().includes(search) ||
+          row.tipo.toLowerCase().includes(search)
+        );
+      });
+
+      if (!rows.length) {
+        elements.viewerTableBody.innerHTML =
+          '<tr><td colspan="3" class="empty-state">Nenhum registro encontrado para o filtro atual.</td></tr>';
+        return;
+      }
+
+      elements.viewerTableBody.innerHTML = rows.map((row) => `
+        <tr>
+          <td>${row.index}</td>
+          <td>${escapeHtml(row.path || "-")}</td>
+          <td>${escapeHtml(row.tipo || "-")}</td>
+        </tr>
+      `).join("");
+    }
+
+    async function refreshViewerFromCurrentBin() {
+      if (!state.binFile) {
+        state.viewerRows = [];
+        elements.viewerTableBody.innerHTML =
+          '<tr><td colspan="3" class="empty-state">Abra um arquivo BIN para visualizar os registros.</td></tr>';
+        updateButtons();
+        return;
+      }
+
+      const buffer = await state.binFile.arrayBuffer();
+      const layout = detectLayout(buffer);
+      state.viewerRows = buildViewerRows(buffer, layout);
+      renderViewerRows();
+      updateButtons();
+      appendLog(`Visualizador atualizado com ${state.viewerRows.length} registros do BIN.`, "status-success");
+    }
+
+    function detectLayoutFromReferenceSize(size) {
+      for (const layout of Object.values(KNOWN_LAYOUTS)) {
+        if (size === layout.entrySize * TOTAL_ENTRIES) return { ...layout };
+      }
+      throw new Error(`Arquivo de referencia com tamanho inesperado: ${size} bytes`);
+    }
+
+    function detectLayoutFromTxt(lines) {
+      for (const rawLine of lines.slice(0, 10)) {
+        const line = rawLine.trim().toLowerCase();
+        if (!line.startsWith("# entry_size=")) continue;
+        const value = Number(line.split("=")[1].trim());
+        if (KNOWN_LAYOUTS[value]) return { ...KNOWN_LAYOUTS[value] };
+      }
+      return null;
+    }
+
+    async function resolveOutputLayout(lines) {
+      if (state.referenceFile) {
+        const buffer = await state.referenceFile.arrayBuffer();
+        return detectLayoutFromReferenceSize(buffer.byteLength);
+      }
+
+      const selected = getSelectedEntrySize();
+      if (selected !== "auto") {
+        return { ...KNOWN_LAYOUTS[Number(selected)] };
+      }
+
+      const fromTxt = detectLayoutFromTxt(lines);
+      if (fromTxt) return fromTxt;
+      return { ...KNOWN_LAYOUTS[528] };
+    }
+
+    function parseTxtLine(line) {
+      const parts = line.split(",").map((part) => part.trim());
+      let path = "";
+      let tipo = "";
+
+      if (parts.length >= 3) {
+        path = parts[1];
+        tipo = parts[2] ? parts[2].slice(0, 1) : "";
+      } else if (parts.length === 2) {
+        path = parts[1];
+      }
+
+      return { path, tipo };
+    }
+
+    function buildBinFromTxt(lines, layout) {
+      const logicalLines = lines.filter((line) => !line.trim().startsWith("#"));
+      const output = new Uint8Array(layout.entrySize * TOTAL_ENTRIES);
+      const encoder = new TextEncoder();
+
+      for (let index = 0; index < TOTAL_ENTRIES; index += 1) {
+        const { path, tipo } = index < logicalLines.length ? parseTxtLine(logicalLines[index]) : { path: "", tipo: "" };
+        const offset = index * layout.entrySize;
+        const block = new Uint8Array(output.buffer, offset, layout.entrySize);
+
+        if (path) {
+          const bytes = Array.from(path, (char) => char.charCodeAt(0) & 0xff);
+          const pathLen = Math.min(bytes.length, layout.entrySize - 2);
+          for (let i = 0; i < pathLen; i += 1) {
+            block[i] = bytes[i];
+          }
+          block[pathLen] = 0;
+        }
+
+        if (tipo && layout.typeOffset >= 0 && layout.typeOffset < layout.entrySize) {
+          block[layout.typeOffset] = tipo.charCodeAt(0);
+        }
+      }
+
+      return output;
+    }
+
+    function downloadBlob(content, filename, mimeType) {
+      const blob = content instanceof Blob ? content : new Blob([content], { type: mimeType });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    async function handleBinFile(file) {
+      state.binFile = file || null;
+      state.detectedLayout = null;
+      elements.binName.textContent = state.binFile ? state.binFile.name : "Nenhum arquivo selecionado";
+      elements.detectedLayout.textContent = "-";
+      elements.detectedCount.textContent = "-";
+
+      if (state.binFile) {
+        appendLog(`BIN selecionado: ${state.binFile.name}`);
+        try {
+          const buffer = await state.binFile.arrayBuffer();
+          const layout = detectLayout(buffer);
+          state.detectedLayout = layout;
+          elements.detectedLayout.textContent = `${layout.entrySize} bytes`;
+          elements.detectedCount.textContent = String(layout.count);
+          appendLog(`Layout detectado automaticamente: ${layout.entrySize} bytes por bloco.`, "status-success");
+          state.viewerRows = buildViewerRows(buffer, layout);
+          renderViewerRows();
+        } catch (error) {
+          appendLog(error.message, "status-danger");
+        }
+      }
+
+      updateButtons();
+    }
+
+    async function handleTxtFile(file) {
+      state.txtFile = file || null;
+      elements.txtName.textContent = state.txtFile ? state.txtFile.name : "Nenhum arquivo selecionado";
+      if (state.txtFile) appendLog(`TXT selecionado: ${state.txtFile.name}`);
+      updateButtons();
+    }
+
+    async function handleReferenceFile(file) {
+      state.referenceFile = file || null;
+      elements.referenceName.textContent = state.referenceFile ? state.referenceFile.name : "Nenhum";
+      updateButtons();
+
+      if (!state.referenceFile) return;
+
+      appendLog(`BIN de referência selecionado: ${state.referenceFile.name}`);
+      try {
+        const buffer = await state.referenceFile.arrayBuffer();
+        const layout = detectLayoutFromReferenceSize(buffer.byteLength);
+        appendLog(`BIN de referência indica layout ${layout.entrySize}.`, "status-success");
+      } catch (error) {
+        appendLog(error.message, "status-danger");
+      }
+    }
+
+    elements.binInput.addEventListener("change", async (event) => {
+      await handleBinFile(event.target.files[0] || null);
+    });
+
+    elements.txtInput.addEventListener("change", (event) => {
+      handleTxtFile(event.target.files[0] || null);
+    });
+
+    elements.referenceInput.addEventListener("change", async (event) => {
+      await handleReferenceFile(event.target.files[0] || null);
+    });
+
+    elements.binOpenButton.addEventListener("click", async () => {
+      const file = await pickFileWithSystemPicker(
+        {
+          excludeAcceptAllOption: false,
+          multiple: false,
+          startIn: "documents",
+          types: [{ description: "Arquivos BIN", accept: { "application/octet-stream": [".bin"] } }]
+        },
+        elements.binInput
+      );
+      if (file) await handleBinFile(file);
+    });
+
+    elements.txtOpenButton.addEventListener("click", async () => {
+      const file = await pickFileWithSystemPicker(
+        {
+          excludeAcceptAllOption: false,
+          multiple: false,
+          startIn: "documents",
+          types: [{ description: "Arquivos TXT", accept: { "text/plain": [".txt"] } }]
+        },
+        elements.txtInput
+      );
+      if (file) await handleTxtFile(file);
+    });
+
+    elements.referenceOpenButton.addEventListener("click", async () => {
+      const file = await pickFileWithSystemPicker(
+        {
+          excludeAcceptAllOption: false,
+          multiple: false,
+          startIn: "documents",
+          types: [{ description: "Arquivos BIN", accept: { "application/octet-stream": [".bin"] } }]
+        },
+        elements.referenceInput
+      );
+      if (file) await handleReferenceFile(file);
+    });
+
+    document.querySelectorAll('input[name="entrySize"]').forEach((input) => {
+      input.addEventListener("change", updateButtons);
+    });
+
+    elements.detectButton.addEventListener("click", async () => {
+      if (!state.binFile) {
+        appendLog("Selecione primeiro um arquivo BIN.", "status-warning");
+        return;
+      }
+
+      try {
+        const buffer = await state.binFile.arrayBuffer();
+        const layout = detectLayout(buffer);
+        state.detectedLayout = layout;
+        elements.detectedLayout.textContent = `${layout.entrySize} bytes`;
+        elements.detectedCount.textContent = String(layout.count);
+        appendLog(
+          `Layout detectado: ${layout.entrySize} bytes por bloco | offset do tipo: ${layout.typeOffset} | entradas: ${layout.count}`,
+          "status-success"
+        );
+      } catch (error) {
+        appendLog(error.message, "status-danger");
+      }
+    });
+
+    elements.viewerSearch.addEventListener("input", renderViewerRows);
+
+    elements.refreshViewerButton.addEventListener("click", async () => {
+      if (!state.binFile) {
+        appendLog("Abra um BIN antes de atualizar a lista.", "status-warning");
+        return;
+      }
+
+      try {
+        await refreshViewerFromCurrentBin();
+      } catch (error) {
+        appendLog(`Erro ao atualizar visualizador: ${error.message}`, "status-danger");
+      }
+    });
+
+    elements.exportViewerTxtButton.addEventListener("click", async () => {
+      if (!state.binFile) {
+        appendLog("Abra um BIN antes de exportar a lista.", "status-warning");
+        return;
+      }
+
+      try {
+        const buffer = await state.binFile.arrayBuffer();
+        const layout = detectLayout(buffer);
+        const txt = buildTxtFromBin(buffer, layout);
+        const outputName = state.binFile.name.replace(/\.bin$/i, "") || "UITextureListN";
+        downloadBlob(txt, `${outputName}_viewer.txt`, "text/plain;charset=utf-8");
+        appendLog("TXT da lista exportado com sucesso.", "status-success");
+      } catch (error) {
+        appendLog(`Erro ao exportar a lista: ${error.message}`, "status-danger");
+      }
+    });
+
+    elements.binToTxtButton.addEventListener("click", async () => {
+      if (!state.binFile) {
+        appendLog("Selecione primeiro um arquivo BIN.", "status-warning");
+        return;
+      }
+
+      try {
+        const buffer = await state.binFile.arrayBuffer();
+        const layout = detectLayout(buffer);
+        const txt = buildTxtFromBin(buffer, layout);
+        const outputName = state.binFile.name.replace(/\.bin$/i, "") || "UITextureListN";
+        downloadBlob(txt, `${outputName}.txt`, "text/plain;charset=utf-8");
+        appendLog(`Conversao BIN -> TXT concluida em layout ${layout.entrySize}.`, "status-success");
+      } catch (error) {
+        appendLog(`Erro em BIN -> TXT: ${error.message}`, "status-danger");
+      }
+    });
+
+    elements.txtToBinButton.addEventListener("click", async () => {
+      if (!state.txtFile) {
+        appendLog("Selecione primeiro um arquivo TXT.", "status-warning");
+        return;
+      }
+
+      try {
+        const text = await state.txtFile.text();
+        const lines = text.split(/\r?\n/);
+        const layout = await resolveOutputLayout(lines);
+        const output = buildBinFromTxt(lines, layout);
+        const outputName = state.txtFile.name.replace(/\.txt$/i, "") || "UITextureListN";
+        downloadBlob(output, `${outputName}.bin`, "application/octet-stream");
+        appendLog(`Conversao TXT -> BIN concluida em layout ${layout.entrySize}.`, "status-success");
+      } catch (error) {
+        appendLog(`Erro em TXT -> BIN: ${error.message}`, "status-danger");
+      }
+    });
+
+    appendLog("Programa iniciado. Selecione um arquivo para converter.", "status-success");
+    updateButtons();
+  </script>
+</body>
+</html>
