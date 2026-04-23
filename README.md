@@ -41,3 +41,6 @@ Layouts suportados:
 - O processamento acontece localmente no navegador.
 - Nenhum arquivo e enviado para servidor.
 - O seletor de arquivos pode variar conforme o suporte do navegador as APIs modernas de abertura local.
+
+- <img width="1070" height="559" alt="image" src="https://github.com/user-attachments/assets/23f2ad3f-af94-47fa-9282-ecb82cda3a38" />
+
